@@ -18,3 +18,11 @@ and the SSD1306 Oled, each on a dedicated i2c interface.
 
 Thats it
 stupid but helpfull
+
+Hardware needed:
+1 x BlackPill
+2 x AS5600   
+1 x OLED SSD1306 0,96" i2c version
+4 x push buttons
+
+
