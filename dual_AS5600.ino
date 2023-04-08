@@ -5,15 +5,13 @@
 // License LGPL 3
 // 
 // Reads the angular value of two AS5600 sensors
-// After positionning the Dobson 
-// to Azimuth 0° (North) and Altitude 0° (Horizontal)
+// After positionning the Dobson roughly to AZ=0 and Alt=0 push the Zero button
+// Now scope is oriented to Azimuth 0° (North) and Altitude 0° (Horizontal)
 // (needs a rough calibration at built time) 
 // then center a well known object in the scope and 
 // with the button AZ+, AZ-, Alt+ and Alt- adjust display to object coordinates. 
 // You are done.
 // 
-
-
 
 /* Example pinmap for BlackPill
         SDA   SCL
@@ -25,6 +23,7 @@
  Button AZ-  PA1
  Button ALT+ PA2
  Button ALT- PA3
+ Button Zero PA4
 */
 
 
@@ -32,22 +31,24 @@
 // I2C-2 instance
 TwoWire Wire2(PB3, PB10);
 TwoWire Wire3(PB4, PA8);
-char azimuth[10] = {0};
-char hauteur[10] = {0};
-float degres;
-int deg, minu, sec, offset_az=0, offset_alt=0;
+
+int offset_az=0, offset_alt=0;
 uint32_t temps=0;
 
 void setup() {
   inputs_init();
   oled_init();
-  //Serial.begin(9600);
   Wire2.begin();
   Wire3.begin();
 }
 
 
 void loop() {
+  char azimuth[10] = {0};
+  char hauteur[10] = {0};
+  float degres;
+  int deg, minu, sec;
+  
   degres = (float)(az()+offset_az)/4095*360;
   if (degres<0) degres += 360;
   deg= degres;
@@ -62,8 +63,11 @@ void loop() {
   sec=(((degres-deg)*60)-minu)*60;
   sprintf(hauteur, "%03d:%02d:%02d", deg, minu, sec);
   delay(10);
-  oled_print();
-  get_button();
+  oled_print(azimuth, hauteur);
+  if ((millis()-temps)>200){
+    get_button();
+    temps=millis();
+  }
 }
 
 uint16_t az()
