@@ -1,5 +1,6 @@
 # dual_AS5600
 Just a simple coordinates display for a manual Dobson
+In English, they are called Digital Setting Circles (DSC)
 
 To help point with my manual Dobson I added two AS5600 encoders on Azimuth and Altitude axis.
 Directly mounted on the axes withour demultiplication the accuracy is in the range of 5.27 arc minutes.
